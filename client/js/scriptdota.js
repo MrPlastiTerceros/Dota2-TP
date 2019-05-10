@@ -190,12 +190,6 @@ function verDatosPJ(cbGeneralDataGame, refId){
 
 ///---------------------------ZONA DE PARTIDAS LIVE------------------------------------------
 
-
-/*findLiveHero(objDOTA => {
-	finderProInGame(objDOTA);
-});*/
-
-
 function findLiveHero(cbLive) {
 
     var request = new XMLHttpRequest();    
@@ -233,7 +227,7 @@ function finderProInGame(cbLive, refId){
  
         for(j = 0; j < cbLive[i].players.length; j ++){
 
-            if((cbLive[i].players[j].hero_id == refId) && (cbLive[i].players[j].is_pro == true)){
+            if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro == true){
 
                 console.log(cbLive[i].players[j].name, cbLive[i].players[j].is_pro, "ES PRO", refId)
                     
@@ -243,7 +237,7 @@ function finderProInGame(cbLive, refId){
                 usingInGame.appendChild(document.createElement("br"));
 
             }        
-            if((cbLive[i].players[j].hero_id == refId) && (cbLive[i].players[j].is_pro != true)){
+            if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro != true){
                         
                cantidad ++;
                 // PARA ENCONTRAR EL NAME NECESITAMOS OTRO AJAX Y POSTERIOR UNA FUNCION QUE HAGA UNA VERIFICACION POR MEDIO DE ACCOUNT_ID

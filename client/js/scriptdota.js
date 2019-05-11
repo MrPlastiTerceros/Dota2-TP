@@ -148,14 +148,19 @@ function verDatosPJ(cbGeneralDataGame, refId){
     switch (attr_base) {
         case "str":
             divStatsPJ.style.backgroundColor = "red"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
-            
+            divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Fuerza"));
+            divStatsPJ.appendChild(document.createElement("br"));
         break;
         case "agi":
             divStatsPJ.style.backgroundColor = "green";
+            divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Agilidad"));
+            divStatsPJ.appendChild(document.createElement("br"));
         
         break
         case "int":
             divStatsPJ.style.backgroundColor = "blue";
+            divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Inteligencia"));
+            divStatsPJ.appendChild(document.createElement("br"));
         
         break;
     }

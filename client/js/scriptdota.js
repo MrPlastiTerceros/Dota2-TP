@@ -194,7 +194,7 @@ function verDatosPJ(cbGeneralDataGame, refId){
         
     }
 
-    console.log("INFORMACION LISTA PARA DIBUJAR EN EL DOM", refId, (rutabase+img), namePJ, id_hero);
+    console.log("INFORMACION LISTA PARA DIBUJAR EN EL DOM", refId,  namePJ, "id hero"+ id_hero);
     
 }
 

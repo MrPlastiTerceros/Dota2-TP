@@ -28,14 +28,12 @@ body{
 .box_base {
 	
 	margin: 0px;
-	/* align-content: flex-start; */
 	background-color: rgb(175, 35, 35);
 	padding: 18px;
 }
 
 .box_PJs {
     
-    /* width: auto; */
 	background-color: rgb(64, 43, 158);
 }
 
@@ -57,9 +55,7 @@ body{
 	margin: 10px;
 	
 	background-color: rgb(175, 35, 35);
-	/* height: auto;
-	width: auto; */
-	
+		
 	padding: 10px;
 	font-size: 40px;
 	font-weight: 600;
@@ -72,18 +68,6 @@ body{
 	
 }
 
-/* .imgPJ{
-	border-radius: 270px;
-	padding: 10px;
-
-	height: auto;
-	width: auto;
-	
-	
-	margin: 10px;
-	
-	background-color: rgb(175, 35, 35);
-} */
 
 .imgSize{
 	border-radius: 270px;
@@ -97,36 +81,23 @@ body{
 	padding: 10px;
 	color: white;
 	
-	/* position: static; */
 	display: inline-block;
-	/* font-weight: 300; */
 	background-color: rgb(162, 185, 57);
 	margin-left: 10px;
-	/* height: auto; */
-	/* width: 56%;	 */
 	font-size: 20px;
-	/* text-align: left; */
-	/* margin: 10px; */
-	
+		
 }
 
 .usingInGame{
 
 	color: white;
 	padding: 10px;
-	/* position: relative; */
 	display: inline-block;
 
-	/* font-weight: 300; */
 	background-color: rgb(42, 159, 189);
 	
-	/* height: auto; */
-	/* width: 55%;	 */
-	font-size: 25px;
-	/* text-justify: distribute-all-lines; */
-	/* margin: 10px; */
-	/* vertical-align: 190px; */
-
+	font-size: 20px;
+	
 }
 
 

@@ -8,14 +8,6 @@ let prosInGame = document.getElementById("prosInGame");
 let prosUsingInGame = document.getElementById("usingInGame");
 
 
-
-/*
-var divImgsAllPJs = document.getElementById("divImgPJ");
-var divContenedorListaPosts = document.getElementById("divContDatos");
-
-var divImgsAllPJs = document.getElementById("divImgPJ");
-var divContenedorListaPosts = document.getElementById("divContDatos");
-*/
 //---------------------------ARMAR / RUTEAR DIVS DE DATA Y DEMASES------------------
 
 consultarDataGame(objDOTA => {
@@ -24,28 +16,30 @@ consultarDataGame(objDOTA => {
 
 });
 
-let rutabase = "https://api.opendota.com";
+let rutabase = "https://api.opendota.com";      
+// RAIZ DE IMG    EXAMPLE: https://api.opendota.com --> /apps/dota2/images/heroes/antimage_full.png?
+
+
 /*
   https://api.opendota.com/api/heroes
   https://api.opendota.com/api/heroStats  acá estan las imagenes
 
-  example: https://api.opendota.com  ---->  /apps/dota2/images/heroes/antimage_full.png?
-
+ 
   https://api.opendota.com/api/proplayers
 
   https://api.opendota.com/api/live   encontrar la forma de implementarlo 
 
   
-  https://api.opendota.com/api/proMatches        SE RELACIONA CON    ID_TEAMS    QUE     RADIANT O DIRE  Y SE SACA EL NOMBRE DEL EVENTO
+  https://api.opendota.com/api/proMatches  SE RELACIONA CON ID_TEAMS / RADIANT O DIRE Y SE SACA EL NOMBRE DEL EVENTO
   
   https://api.opendota.com/api/teams/   543897    /heroes   EL INT ES EL ID_TEAM
 
   https://api.opendota.com/api/teams
-
  
 */
 
 
+// AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FUNCA
 
 function consultarDataGame(cbGeneralDataGame) {
 
@@ -56,14 +50,17 @@ function consultarDataGame(cbGeneralDataGame) {
         if (this.readyState == 4 && this.status == 200) {
 
             let objDOTA = JSON.parse(request.responseText);
-            let objDOT = objDOTA.map(function(item){
-                return {
-                    id_hero: item
 
-                }
+            // TRATAR DE IMPLEMENTAR MAP PARA QUE SOLO SE CARGUE LO QUE NECESITO, AUNQUE CREO NO HABRA DIFERENCIA...
 
-            });
-            console.log(objDOT);
+            // let objDOT = objDOTA.map(function(item){
+            //     return {
+            //         id_hero: item
+
+            //     }
+
+            // });
+            //console.log(objDOT);
             cbGeneralDataGame(objDOTA);       
             
         } 
@@ -76,15 +73,6 @@ function consultarDataGame(cbGeneralDataGame) {
 
 }
 
-// A PARTIR DE ACA TOMAR EJEMPLO
-
-// arrPosts = arrRes.map(function(item)){//recibo un cb que recibe solo el primer parametro
-//     return{
-//         id: item id, 
-//         titulo: item title, 
-//         contenido: item.body;
-//     }
-// }
 
 function renderImgPJ(cbGeneralDataGame) {
     
@@ -106,7 +94,7 @@ function renderImgPJ(cbGeneralDataGame) {
 
             findLiveHero(objLive => {
             
-                finderProInGame(objLive);
+                finderProInGame(objLive, refId);
             
             })
         })
@@ -134,7 +122,7 @@ function verDatosPJ(cbGeneralDataGame, refId){
 
     let icon = cbGeneralDataGame[refId].icon;                       //ICONO PJ MIN    PARA ILUSTRAR(?
 
-    // NO OLVIDAR IMPLEMENTAR LAS IMAGENES ESTATICAS DE LA CARPETA STUFF CON LA IMAGEN DEL LOS ATRIBUTOS
+    // NO OLVIDAR IMPLEMENTAR LAS ESTATICAS DE LA CARPETA STUFF CON LA IMAGEN DEL LOS ATRIBUTOS
     
     let base_str = cbGeneralDataGame[refId].base_str;               //BASE STR
     let base_agi = cbGeneralDataGame[refId].base_agi;               //BASE AGI
@@ -156,10 +144,10 @@ function verDatosPJ(cbGeneralDataGame, refId){
     render.setAttribute("src", (rutabase+img));
     divImgPJ.appendChild(render);   
     
-
+    // PISA EL COLOR
     switch (attr_base) {
         case "str":
-            divStatsPJ.style.backgroundColor = "red"; /// TODO(? CHANGE COLOR BACKGR POR TONOS LINDOS :V
+            divStatsPJ.style.backgroundColor = "red"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
             
         break;
         case "agi":
@@ -207,6 +195,8 @@ function verDatosPJ(cbGeneralDataGame, refId){
 
 ///---------------------------ZONA DE PARTIDAS LIVE------------------------------------------
 
+
+// 10/5 LA API RESPONDE MUY LENTO. VERIFICADO POR FUERA DEL SCRIP 
 function findLiveHero(cbLive) {
 
     var request = new XMLHttpRequest();    
@@ -216,7 +206,7 @@ function findLiveHero(cbLive) {
         if (this.readyState == 4 && this.status == 200) {
 
             let objLive = JSON.parse(request.responseText);
-
+            console.log(objLive);
             cbLive(objLive);       
            
         } 
@@ -236,27 +226,28 @@ function findLiveHero(cbLive) {
 function finderProInGame(cbLive, refId){
 
     prosUsingInGame.innerHTML = " ";
-        
-    let cantidad = 0;
 
-    usingInGame.appendChild(document.createTextNode("Pro Players: "))  ;  
+    usingInGame.appendChild(document.createTextNode("Pros en este momento: "))  ;  
     usingInGame.appendChild(document.createElement("br"));
     
+    let normies = 0;
+    
+        
     for(i = 0; i < cbLive.length; i ++){
  
         for(j = 0; j < cbLive[i].players.length; j ++){
-
+           
             if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro == true){
-                                  
+                                
                 // SE RELLENA CON LA DATA DE LA PARTIDA (enlazar otro ajax) DERECHO AL DOM
-                // SE DEBERIA HACER OTRA FUNCION QUE DIBUJE LOS DATOS AL DOOOOOOOOMM (?  talves cuando se enlacen más datos.
+                // SE DEBERIA HACER OTRA FUNCION(imperativo p/ mejor control de los datos) QUE DIBUJE LOS DATOS AL DOOMM (? 
                 usingInGame.appendChild(document.createTextNode((cbLive[i].players[j].name)))  ;  
                 usingInGame.appendChild(document.createElement("br"));
-         
+                         
             }        
             if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro != true){
                         
-               cantidad ++;
+               normies ++;
                 // PARA ENCONTRAR EL NAME NECESITAMOS OTRO AJAX Y POSTERIOR UNA FUNCION QUE HAGA UNA VERIFICACION POR MEDIO DE ACCOUNT_ID
                 // O EN SU DEFECTO UN CONTADOR Y MOSTRAR LA CANTIDAD DE PERSONAS QUE ESTAN JUGANDO ESE PJ EN ESE MOMENTO
                 // S  A  M  E
@@ -264,9 +255,10 @@ function finderProInGame(cbLive, refId){
         }                
     }
 
-    usingInGame.appendChild(document.createTextNode("Jugadores usandolo: " + cantidad))  ;  
+    usingInGame.appendChild(document.createTextNode("Jugadores usandolo: "+ normies ))  ;  
     usingInGame.appendChild(document.createElement("br"));
-    console.log( "En partida: ", cantidad);
+    
+    console.log( "En partida: ", normies);
 
 
 }

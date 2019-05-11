@@ -55,12 +55,17 @@ function consultarDataGame(cbGeneralDataGame) {
 
         if (this.readyState == 4 && this.status == 200) {
 
-            var objDOTA = JSON.parse(request.responseText);
+            let objDOTA = JSON.parse(request.responseText);
+            let objDOT = objDOTA.map(function(item){
+                return {
+                    id_hero: item
 
+                }
+
+            });
+            console.log(objDOT);
             cbGeneralDataGame(objDOTA);       
-
-            console.log(objDOTA);
-
+            
         } 
     }
 
@@ -71,17 +76,24 @@ function consultarDataGame(cbGeneralDataGame) {
 
 }
 
+// A PARTIR DE ACA TOMAR EJEMPLO
+
+// arrPosts = arrRes.map(function(item)){//recibo un cb que recibe solo el primer parametro
+//     return{
+//         id: item id, 
+//         titulo: item title, 
+//         contenido: item.body;
+//     }
+// }
 
 function renderImgPJ(cbGeneralDataGame) {
-
-    let listaImgDota = cbGeneralDataGame;
-
-    for (let i = 0; i < listaImgDota.length; i ++) {
+    
+    for (let i = 0; i < cbGeneralDataGame.length; i ++) {
         
         let renderPJ = document.createElement("img");
 
         renderPJ.setAttribute("class", "img_dota");
-        renderPJ.setAttribute("src",  (rutabase + (listaImgDota[i].img)));
+        renderPJ.setAttribute("src",  (rutabase + (cbGeneralDataGame[i].img)));
 
         divImgsAllPJs.appendChild(renderPJ);
      
@@ -92,9 +104,9 @@ function renderImgPJ(cbGeneralDataGame) {
             
             verDatosPJ(cbGeneralDataGame, refId);
 
-            findLiveHero(objDOTA => {
+            findLiveHero(objLive => {
             
-                finderProInGame(objDOTA,refId);
+                finderProInGame(objLive);
             
             })
         })
@@ -106,7 +118,7 @@ function renderImgPJ(cbGeneralDataGame) {
 
 function verDatosPJ(cbGeneralDataGame, refId){
 
-    divGeneralPJ.innerHTML = "";
+    divGeneralPJ.innerHTML = "";                                    //LIMPIA VISTA
     divImgPJ.innerHTML = "";
     divStatsPJ.innerHTML = "";
 
@@ -118,8 +130,7 @@ function verDatosPJ(cbGeneralDataGame, refId){
     let attr_base = cbGeneralDataGame[refId].primary_attr;          //ATRIBUTO PJ
     
     let attack_type = cbGeneralDataGame[refId].attack_type;         //TIPO DE ATAQUE
-    let role = cbGeneralDataGame[refId].roles;                      //ROL QUE DESEMPEÑA usar un for roles.length y que dibuje los datos
-
+    let role = cbGeneralDataGame[refId].roles;                      //ROL QUE DESEMPEÑA 
 
     let icon = cbGeneralDataGame[refId].icon;                       //ICONO PJ MIN    PARA ILUSTRAR(?
 
@@ -141,16 +152,14 @@ function verDatosPJ(cbGeneralDataGame, refId){
     divGeneralPJ.appendChild(document.createTextNode(namePJ));
     
     let render = document.createElement("img");
-
     render.setAttribute("class", "imgSize");
     render.setAttribute("src", (rutabase+img));
     divImgPJ.appendChild(render);   
-
     
 
     switch (attr_base) {
         case "str":
-            divStatsPJ.style.backgroundColor = "red"; /// RECORDAR CAMBIAR EL CODIGO DE COLORES PARA EL BACKGROUND
+            divStatsPJ.style.backgroundColor = "red"; /// TODO(? CHANGE COLOR BACKGR POR TONOS LINDOS :V
             
         break;
         case "agi":
@@ -162,18 +171,26 @@ function verDatosPJ(cbGeneralDataGame, refId){
         
         break;
     }
+
+    // NOTA: NO ME FUNCO LA FORMA DE {} PARA CONCATENAR, DEBO SER NOOB....
     divStatsPJ.appendChild(document.createTextNode("Fuerza base: " + base_str + " + " + str_gain + " por level."));
     divStatsPJ.appendChild(document.createElement("br"));
-    divStatsPJ.appendChild(document.createTextNode("Agilidad base: " + base_agi + " + " + agi_gain + " por level.\n"));
+
+    divStatsPJ.appendChild(document.createTextNode("Agilidad base: " + base_agi + " + " + agi_gain + " por level."));
     divStatsPJ.appendChild(document.createElement("br"));
-    divStatsPJ.appendChild(document.createTextNode("Inteligencia base: " + base_int + " + " + int_gain + " por level.\n"));
+
+    divStatsPJ.appendChild(document.createTextNode("Inteligencia base: " + base_int + " + " + int_gain + " por level."));
     divStatsPJ.appendChild(document.createElement("br"));
+
     divStatsPJ.appendChild(document.createTextNode("Tipo de ataque: " + attack_type));
     divStatsPJ.appendChild(document.createElement("br"));
+
     divStatsPJ.appendChild(document.createTextNode("Velocidad de ataque: " + attack_rate));
     divStatsPJ.appendChild(document.createElement("br"));
+
     divStatsPJ.appendChild(document.createTextNode("Velocidad de movimiento: " + move_speed));
     divStatsPJ.appendChild(document.createElement("br"));
+
     divStatsPJ.appendChild(document.createTextNode("Roles atribuidos: "));
 
     for (let i = 0; i < role.length; i++) {
@@ -198,8 +215,7 @@ function findLiveHero(cbLive) {
 
         if (this.readyState == 4 && this.status == 200) {
 
-            var objLive = JSON.parse(request.responseText);
-
+            let objLive = JSON.parse(request.responseText);
 
             cbLive(objLive);       
            
@@ -215,37 +231,37 @@ function findLiveHero(cbLive) {
 
 
 //-------------------------- SECCION DE JUGADORES PROFESIONALES EN PARTIDA PUBLICAS---------------------------------------
-///*  DATOS QUE DEBE MOSTRAR: 
+///*  DATOS A MOSTRAR(por el momento): NOMBRE JUGADOR PRO (USAR ID-PRO PARA ENLAZAR OTRO AJAX) Y CUANTAS PERSONAS NO PRO LO ESTAN USANDO 
 
 function finderProInGame(cbLive, refId){
 
     prosUsingInGame.innerHTML = " ";
         
     let cantidad = 0;
+
+    usingInGame.appendChild(document.createTextNode("Pro Players: "))  ;  
+    usingInGame.appendChild(document.createElement("br"));
     
     for(i = 0; i < cbLive.length; i ++){
  
         for(j = 0; j < cbLive[i].players.length; j ++){
 
             if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro == true){
-
-                console.log(cbLive[i].players[j].name, cbLive[i].players[j].is_pro, "ES PRO", refId)
-                    
-                // EN ESTE COMO EN EL SIGUIENTE SE RELLENA CON LA DATA DE LA PARTIDA DERECHO AL DOM
-                // SE DEBERIA HACER OTRA FUNCION QUE DIBUJE LOS DATOS AL DOOOOOOOOMM
+                                  
+                // SE RELLENA CON LA DATA DE LA PARTIDA (enlazar otro ajax) DERECHO AL DOM
+                // SE DEBERIA HACER OTRA FUNCION QUE DIBUJE LOS DATOS AL DOOOOOOOOMM (?  talves cuando se enlacen más datos.
                 usingInGame.appendChild(document.createTextNode((cbLive[i].players[j].name)))  ;  
                 usingInGame.appendChild(document.createElement("br"));
-
+         
             }        
             if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro != true){
                         
                cantidad ++;
                 // PARA ENCONTRAR EL NAME NECESITAMOS OTRO AJAX Y POSTERIOR UNA FUNCION QUE HAGA UNA VERIFICACION POR MEDIO DE ACCOUNT_ID
                 // O EN SU DEFECTO UN CONTADOR Y MOSTRAR LA CANTIDAD DE PERSONAS QUE ESTAN JUGANDO ESE PJ EN ESE MOMENTO
-
                 // S  A  M  E
-            }            
-        }        
+            }               
+        }                
     }
 
     usingInGame.appendChild(document.createTextNode("Jugadores usandolo: " + cantidad))  ;  
@@ -253,12 +269,10 @@ function finderProInGame(cbLive, refId){
     console.log( "En partida: ", cantidad);
 
 
-
-
-
 }
 
 //-----------------------  IMPLEMENTAR PARTIDAS PROFESIONALES----------------------
+// LO MISMO QUE LO ANTERIOR QUE RETORNE: TORNEO QUE SE ESTA JUGANDO, DATOS DEL TEAM COMPLETO, PARTIDAS JUGADAS, GANADAS Y PORCENTAJE DE VICTORIA
 
 
 

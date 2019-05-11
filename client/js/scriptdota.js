@@ -201,7 +201,7 @@ function verDatosPJ(cbGeneralDataGame, refId){
 ///---------------------------ZONA DE PARTIDAS LIVE------------------------------------------
 
 
-// 10/5 LA API RESPONDE MUY LENTO. VERIFICADO POR FUERA DEL SCRIP 
+// 10/5 LA API RESPONDE MUY LENTO. VERIFICADO POR FUERA DEL SCRIP/ ES TEMP DE TORNEOS DEBE ESTAR SOBRECARGADA(?
 function findLiveHero(cbLive) {
 
     var request = new XMLHttpRequest();    

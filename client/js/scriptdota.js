@@ -1,14 +1,17 @@
-let divImgsAllPJs = document.getElementById("divImgAllPJ");   //se cargan las imagenes de los pj
-let divGeneralPJ = document.getElementById("divGeneralPJ");    // se dibuja el nombre pj al dom 
+//div en el que se cargan las imagenes de los pj
+let divImgsAllPJs = document.getElementById("divImgAllPJ");     
+//div en el que se dibuja el nombre pj al dom 
+let divGeneralPJ = document.getElementById("divGeneralPJ");    
+//en el que se carga la imagen del pj(más grande) despues del click
+let divImgPJ = document.getElementById("divImgPJ");     
+//span donde se dibuja la data del pj
+let divStatsPJ = document.getElementById("divStatsPJ");  
+//No esta en uso        
+let prosInGame = document.getElementById("prosInGame");      
+//div donde se dibujan los pros y los nomries usando el pj
+let prosUsingInGame = document.getElementById("usingInGame");   
 
-let divImgPJ = document.getElementById("divImgPJ");
-let divStatsPJ = document.getElementById("divStatsPJ");
-
-let prosInGame = document.getElementById("prosInGame");
-let prosUsingInGame = document.getElementById("usingInGame");
-
-
-//---------------------------ARMAR / RUTEAR DIVS DE DATA Y DEMASES------------------
+//------------------------------------------------------------------------
 
 consultarDataGame(objDOTA => {
 

@@ -19,8 +19,9 @@ consultarDataGame(objDOTA => {
 
 });
 
+// raiz de img    EXAMPLE: https://api.opendota.com --> /apps/dota2/images/heroes/antimage_full.png?
 let rutabase = "https://api.opendota.com";      
-// RAIZ DE IMG    EXAMPLE: https://api.opendota.com --> /apps/dota2/images/heroes/antimage_full.png?
+
 
 
 /*
@@ -44,7 +45,7 @@ let rutabase = "https://api.opendota.com";
 
 // AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FUNCA
 
-function consultarDataGame(cbGeneralDataGame) {
+function consultarDataGame(objData) {
 
     var request = new XMLHttpRequest();    
     
@@ -59,12 +60,10 @@ function consultarDataGame(cbGeneralDataGame) {
             // let objDOT = objDOTA.map(function(item){
             //     return {
             //         id_hero: item
-
             //     }
-
             // });
             //console.log(objDOT);
-            cbGeneralDataGame(objDOTA);       
+            objData(objDOTA);       
             
         } 
     }
@@ -77,14 +76,14 @@ function consultarDataGame(cbGeneralDataGame) {
 }
 
 
-function renderImgPJ(cbGeneralDataGame) {
+function renderImgPJ(objData) {
     
-    for (let i = 0; i < cbGeneralDataGame.length; i ++) {
+    for (let i = 0; i < objData.length; i ++) {
         
         let renderPJ = document.createElement("img");
 
         renderPJ.setAttribute("class", "img_dota");
-        renderPJ.setAttribute("src",  (rutabase + (cbGeneralDataGame[i].img)));
+        renderPJ.setAttribute("src",  (rutabase + (objData[i].img)));
 
         divImgsAllPJs.appendChild(renderPJ);
      
@@ -93,7 +92,7 @@ function renderImgPJ(cbGeneralDataGame) {
 
             let refId = i;
             
-            verDatosPJ(cbGeneralDataGame, refId);
+            verDatosPJ(objData, refId);
 
             findLiveHero(objLive => {
             
@@ -107,37 +106,30 @@ function renderImgPJ(cbGeneralDataGame) {
 }
 
 
-function verDatosPJ(cbGeneralDataGame, refId){
+function verDatosPJ(objData, refId){
 
-    divGeneralPJ.innerHTML = "";                                    //LIMPIA VISTA
+    divGeneralPJ.innerHTML = "";                            //se limpia la vista del elemento
     divImgPJ.innerHTML = "";
     divStatsPJ.innerHTML = "";
 
-    let id_hero = cbGeneralDataGame[refId].id;
-    let namePJ = cbGeneralDataGame[refId].localized_name;           //NOMBRE PJ 
+    let id_hero = objData[refId].id;
+    let namePJ = objData[refId].localized_name;             //nombre pj 
+    let img = objData[refId].img;                           //link img
+    let attr_base = objData[refId].primary_attr;            //atributo primario  
+    let attack_type = objData[refId].attack_type;           //tipo de ataque
+    let role = objData[refId].roles;                        //rol que desempeña 
+    let icon = objData[refId].icon;                         //icono del pj    todavia sin usar
+    // NO OLVIDAR IMPLEMENTAR LAS ESTATICAS DE LA CARPETA STUFF CON LA IMAGEN DEL LOS ATRIBUTOS    
+    let base_str = objData[refId].base_str;                 //fuerza base
+    let base_agi = objData[refId].base_agi;                 //agilidad base
+    let base_int = objData[refId].base_int;                 //inteligencia base
 
-    let img = cbGeneralDataGame[refId].img;                         //LINK IMG
+    let str_gain = objData[refId].str_gain;                 //ganancia de fuerza
+    let agi_gain = objData[refId].agi_gain;                 //ganancia de agilidad
+    let int_gain = objData[refId].int_gain;                 //ganancia de inteligencia
 
-    let attr_base = cbGeneralDataGame[refId].primary_attr;          //ATRIBUTO PJ
-    
-    let attack_type = cbGeneralDataGame[refId].attack_type;         //TIPO DE ATAQUE
-    let role = cbGeneralDataGame[refId].roles;                      //ROL QUE DESEMPEÑA 
-
-    let icon = cbGeneralDataGame[refId].icon;                       //ICONO PJ MIN    PARA ILUSTRAR(?
-
-    // NO OLVIDAR IMPLEMENTAR LAS ESTATICAS DE LA CARPETA STUFF CON LA IMAGEN DEL LOS ATRIBUTOS
-    
-    let base_str = cbGeneralDataGame[refId].base_str;               //BASE STR
-    let base_agi = cbGeneralDataGame[refId].base_agi;               //BASE AGI
-    let base_int = cbGeneralDataGame[refId].base_int;               //BASE INT
-
-    let str_gain = cbGeneralDataGame[refId].str_gain;               //STR GAIN
-    let agi_gain = cbGeneralDataGame[refId].agi_gain;               //AGI GAIN
-    let int_gain = cbGeneralDataGame[refId].int_gain;               //INT GAIN
-
-
-    let attack_rate = cbGeneralDataGame[refId].attack_rate;         //TIEMPO DE ATAQUE
-    let move_speed = cbGeneralDataGame[refId].move_speed;           //VEL MOV BASE
+    let attack_rate = objData[refId].attack_rate;           //tiempo de ataque
+    let move_speed = objData[refId].move_speed;             //velocidad de moviento
          
 
     divGeneralPJ.appendChild(document.createTextNode(namePJ));
@@ -147,7 +139,7 @@ function verDatosPJ(cbGeneralDataGame, refId){
     render.setAttribute("src", (rutabase+img));
     divImgPJ.appendChild(render);   
     
-    // PISA EL COLOR
+    // se le asigna un background color de acuerdo al atributo primario
     switch (attr_base) {
         case "str":
             divStatsPJ.style.backgroundColor = "red"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
@@ -189,23 +181,20 @@ function verDatosPJ(cbGeneralDataGame, refId){
 
     divStatsPJ.appendChild(document.createTextNode("Roles atribuidos: "));
 
+    //recorre el objeto y dibuja los roles que se le atribuye al pj
     for (let i = 0; i < role.length; i++) {
 
         divStatsPJ.appendChild(document.createElement("br"));
         divStatsPJ.appendChild(document.createTextNode(role[i]));
-        console.log(role[i]);
         
     }
-
-    console.log("INFORMACION LISTA PARA DIBUJAR EN EL DOM", refId,  namePJ, "id hero"+ id_hero);
-    
+      
 }
 
 ///---------------------------ZONA DE PARTIDAS LIVE------------------------------------------
 
-
 // 10/5 LA API RESPONDE MUY LENTO. VERIFICADO POR FUERA DEL SCRIP/ ES TEMP DE TORNEOS DEBE ESTAR SOBRECARGADA(?
-function findLiveHero(cbLive) {
+function findLiveHero(objLiveData) {
 
     var request = new XMLHttpRequest();    
     
@@ -214,66 +203,58 @@ function findLiveHero(cbLive) {
         if (this.readyState == 4 && this.status == 200) {
 
             let objLive = JSON.parse(request.responseText);
-            console.log(objLive);
-            cbLive(objLive);       
+            
+            objLiveData(objLive);       
            
         } 
     }
 
     request.open("GET","https://api.opendota.com/api/live");
     request.send();
-
-    console.log("Lista LIVE OK!!, ");
-
+    
 }
 
 
 //-------------------------- SECCION DE JUGADORES PROFESIONALES EN PARTIDA PUBLICAS---------------------------------------
 ///*  DATOS A MOSTRAR(por el momento): NOMBRE JUGADOR PRO (USAR ID-PRO PARA ENLAZAR OTRO AJAX) Y CUANTAS PERSONAS NO PRO LO ESTAN USANDO 
 
-function finderProInGame(cbLive, refId){
+function finderProInGame(objLiveData, refId){
 
-    prosUsingInGame.innerHTML = " ";
+    prosUsingInGame.innerHTML = " ";                //se limpia el elemento
 
     usingInGame.appendChild(document.createTextNode("Pros en este momento: "))  ;  
     usingInGame.appendChild(document.createElement("br"));
     
     let normies = 0;
-    
-        
-    for(i = 0; i < cbLive.length; i ++){
+    //se recorre el objLiveData        
+    for(i = 0; i < objLiveData.length; i ++){
  
-        for(j = 0; j < cbLive[i].players.length; j ++){
+        for(j = 0; j < objLiveData[i].players.length; j ++){
            
-            if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro == true){
+            if(objLiveData[i].players[j].hero_id == refId && objLiveData[i].players[j].is_pro == true){
                                 
-                // SE RELLENA CON LA DATA DE LA PARTIDA (enlazar otro ajax) DERECHO AL DOM
-                // SE DEBERIA HACER OTRA FUNCION(imperativo p/ mejor control de los datos) QUE DIBUJE LOS DATOS AL DOOMM (? 
-                usingInGame.appendChild(document.createTextNode((cbLive[i].players[j].name)))  ;  
+                // se rellena con la data de la partida (enlazar otro ajax), derechito al doom :v 
+                // se deberia hacer otra funcion(imperativo p/ mejor control de los datos) que dibuje los datos al doom (? 
+                usingInGame.appendChild(document.createTextNode((objLiveData[i].players[j].name)))  ;  
                 usingInGame.appendChild(document.createElement("br"));
                          
             }        
-            if(cbLive[i].players[j].hero_id == refId && cbLive[i].players[j].is_pro != true){
+            if(objLiveData[i].players[j].hero_id == refId && objLiveData[i].players[j].is_pro != true){
                         
                normies ++;
-                // PARA ENCONTRAR EL NAME NECESITAMOS OTRO AJAX Y POSTERIOR UNA FUNCION QUE HAGA UNA VERIFICACION POR MEDIO DE ACCOUNT_ID
+                //para encontrar el name necesitamos otro ajax y posterior una funcion que realice una verificacion por medio de ACCOUNT_ID
                 // O EN SU DEFECTO UN CONTADOR Y MOSTRAR LA CANTIDAD DE PERSONAS QUE ESTAN JUGANDO ESE PJ EN ESE MOMENTO
-                // S  A  M  E
+                
             }               
         }                
     }
 
     usingInGame.appendChild(document.createTextNode("Jugadores usandolo: "+ normies ))  ;  
     usingInGame.appendChild(document.createElement("br"));
-    
-    console.log( "En partida: ", normies);
-
 
 }
 
 //-----------------------  IMPLEMENTAR PARTIDAS PROFESIONALES----------------------
 // LO MISMO QUE LO ANTERIOR QUE RETORNE: TORNEO QUE SE ESTA JUGANDO, DATOS DEL TEAM COMPLETO, PARTIDAS JUGADAS, GANADAS Y PORCENTAJE DE VICTORIA
-
-
 
 

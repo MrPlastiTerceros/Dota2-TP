@@ -112,7 +112,7 @@ function verDatosPJ(objData, refId){
     divImgPJ.innerHTML = "";
     divStatsPJ.innerHTML = "";
 
-    let id_hero = objData[refId].id;
+    let id_hero = objData[refId].id;                        // de momento sin uso 
     let namePJ = objData[refId].localized_name;             //nombre pj 
     let img = objData[refId].img;                           //link img
     let attr_base = objData[refId].primary_attr;            //atributo primario  
@@ -131,32 +131,65 @@ function verDatosPJ(objData, refId){
     let attack_rate = objData[refId].attack_rate;           //tiempo de ataque
     let move_speed = objData[refId].move_speed;             //velocidad de moviento
          
-
     divGeneralPJ.appendChild(document.createTextNode(namePJ));
-    
+
+    switch (attr_base) {
+        case "str":
+            
+            let logostr = document.createElement("img");
+            logostr.setAttribute("class","logoAtri");    
+            logostr.setAttribute("src", "../stuff/hero_str.png");
+            divGeneralPJ.appendChild(logostr);
+            
+        break;
+
+        case "agi":                    
+
+            let logoagi = document.createElement("img");
+            logoagi.setAttribute("class","logoAtri");    
+            logoagi.setAttribute("src", "../stuff/hero_agi.png");
+            divGeneralPJ.appendChild(logoagi);
+                    
+        break
+
+        case "int":            
+            
+            let logoint = document.createElement("img");
+            logoint.setAttribute("class","logoAtri");    
+            logoint.setAttribute("src", "../stuff/hero_int.png");
+            divGeneralPJ.appendChild(logoint);
+                    
+        break;
+    }
+
+        
     let render = document.createElement("img");
     render.setAttribute("class", "imgSize");
     render.setAttribute("src", (rutabase+img));
     divImgPJ.appendChild(render);   
+ 
     
     // se le asigna un background color de acuerdo al atributo primario
     switch (attr_base) {
         case "str":
-            divStatsPJ.style.backgroundColor = "red"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
+            divStatsPJ.style.backgroundColor = "#f34336"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
             divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Fuerza"));
             divStatsPJ.appendChild(document.createElement("br"));
+
         break;
+
         case "agi":
             divStatsPJ.style.backgroundColor = "green";
             divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Agilidad"));
             divStatsPJ.appendChild(document.createElement("br"));
-        
+
         break
+
         case "int":
             divStatsPJ.style.backgroundColor = "blue";
             divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Inteligencia"));
             divStatsPJ.appendChild(document.createElement("br"));
-        
+
         break;
     }
 

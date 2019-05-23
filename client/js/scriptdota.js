@@ -133,60 +133,46 @@ function verDatosPJ(objData, refId){
          
     divGeneralPJ.appendChild(document.createTextNode(namePJ));
 
-    switch (attr_base) {
-        case "str":
             
-            let logostr = document.createElement("img");
-            logostr.setAttribute("class","logoAtri");    
-            logostr.setAttribute("src", "../stuff/hero_str.png");
-            divGeneralPJ.appendChild(logostr);
-            
-        break;
-
-        case "agi":                    
-
-            let logoagi = document.createElement("img");
-            logoagi.setAttribute("class","logoAtri");    
-            logoagi.setAttribute("src", "../stuff/hero_agi.png");
-            divGeneralPJ.appendChild(logoagi);
-                    
-        break
-
-        case "int":            
-            
-            let logoint = document.createElement("img");
-            logoint.setAttribute("class","logoAtri");    
-            logoint.setAttribute("src", "../stuff/hero_int.png");
-            divGeneralPJ.appendChild(logoint);
-                    
-        break;
-    }
-
-        
     let render = document.createElement("img");
     render.setAttribute("class", "imgSize");
     render.setAttribute("src", (rutabase+img));
     divImgPJ.appendChild(render);   
  
     
-    // se le asigna un background color de acuerdo al atributo primario
+    // se le asigna un background color de acuerdo al atributo primario y le agrega el icono del atributo al lado del nombre
     switch (attr_base) {
         case "str":
-            divStatsPJ.style.backgroundColor = "#f34336"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
+            let logostr = document.createElement("img");
+            logostr.setAttribute("class","logoAtri");    
+            logostr.setAttribute("src", "../stuff/hero_str.png");
+            divGeneralPJ.appendChild(logostr);
+
+            divStatsPJ.style.backgroundColor = "#D3423D"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
             divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Fuerza"));
             divStatsPJ.appendChild(document.createElement("br"));
 
         break;
 
         case "agi":
-            divStatsPJ.style.backgroundColor = "green";
+            let logoagi = document.createElement("img");
+            logoagi.setAttribute("class","logoAtri");    
+            logoagi.setAttribute("src", "../stuff/hero_agi.png");
+            divGeneralPJ.appendChild(logoagi);
+
+            divStatsPJ.style.backgroundColor = "#49B881";
             divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Agilidad"));
             divStatsPJ.appendChild(document.createElement("br"));
 
         break
 
         case "int":
-            divStatsPJ.style.backgroundColor = "blue";
+            let logoint = document.createElement("img");
+            logoint.setAttribute("class","logoAtri");    
+            logoint.setAttribute("src", "../stuff/hero_int.png");
+            divGeneralPJ.appendChild(logoint);
+
+            divStatsPJ.style.backgroundColor = "#3776A0";
             divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Inteligencia"));
             divStatsPJ.appendChild(document.createElement("br"));
 

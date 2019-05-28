@@ -12,7 +12,7 @@ En ese momento se puede abrir un browser y navegar a `localhost:5000` y debería
 
 ## Especificaciones del desarrollo
 
-Pendiente!
+La idea original es que lo jugadores constantes puedan informarse rapido de las caracteristicas(talentos, stadisticas base, habilidades, historia introductoria) del pj clickeado. Aparte de una lista de proplayers que lo estan usando en el momento(si es el caso) junto con la cantidad de players no profesionales, con el fin de saber la pularidad del heroe PJ en cuestión.
 
 ### SERVER
 
@@ -22,4 +22,3 @@ Es el script de inicio de la aplicación, que monta el servidor web escuchando e
 
 ### CLIENT
 Es una SPA !
-Pendiente!

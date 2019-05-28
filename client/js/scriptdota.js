@@ -176,8 +176,7 @@ function verAbilities(flag1){
     }    
     
     tabla.appendChild(tblBody);
-    tabla.setAttribute("border", "1");
-    
+        
     divAbilitiesPJ.appendChild(tabla);
     console.log("not again, commit is important");
 

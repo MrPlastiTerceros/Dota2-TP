@@ -4,11 +4,15 @@ let divImgsAllPJs = document.getElementById("divImgAllPJ");
 let divGeneralPJ = document.getElementById("divGeneralPJ");    
 //en el que se carga la imagen del pj(más grande) despues del click
 let divImgPJ = document.getElementById("divImgPJ");     
-//span donde se dibuja la data del pj
+//div donde se muestra la historia del pj
+let divhistoryPJ = document.getElementById("divHistoryPJ");
+//div donde se dibuja las habilidades del pj
+let divAbilitiesPJ = document.getElementById("divAbilitiesPJ");
+//div donde se dibuja la data del pj
 let divStatsPJ = document.getElementById("divStatsPJ");  
-//No esta en uso        
-let prosInGame = document.getElementById("prosInGame");      
-//div donde se dibujan los pros y los nomries usando el pj
+//donde se dibujan los talentos(datos) del pj      
+let divTalentsPJ = document.getElementById("divTalentsPJ");      
+//span donde se dibujan los pros y los nomries usando el pj
 let prosUsingInGame = document.getElementById("usingInGame");   
 
 //------------------------------------------------------------------------
@@ -19,28 +23,9 @@ consultarDataGame(objDOTA => {
 
 });
 
+
 // raiz de img    EXAMPLE: https://api.opendota.com --> /apps/dota2/images/heroes/antimage_full.png?
 let rutabase = "https://api.opendota.com";      
-
-
-
-/*
-  https://api.opendota.com/api/heroes
-  https://api.opendota.com/api/heroStats  acá estan las imagenes
-
- 
-  https://api.opendota.com/api/proplayers
-
-  https://api.opendota.com/api/live   encontrar la forma de implementarlo 
-
-  
-  https://api.opendota.com/api/proMatches  SE RELACIONA CON ID_TEAMS / RADIANT O DIRE Y SE SACA EL NOMBRE DEL EVENTO
-  
-  https://api.opendota.com/api/teams/   543897    /heroes   EL INT ES EL ID_TEAM
-
-  https://api.opendota.com/api/teams
- 
-*/
 
 
 // AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FUNCA
@@ -53,26 +38,15 @@ function consultarDataGame(objData) {
 
         if (this.readyState == 4 && this.status == 200) {
 
-            let objDOTA = JSON.parse(request.responseText);
-
-            // TRATAR DE IMPLEMENTAR MAP PARA QUE SOLO SE CARGUE LO QUE NECESITO, AUNQUE CREO NO HABRA DIFERENCIA...
-
-            // let objDOT = objDOTA.map(function(item){
-            //     return {
-            //         id_hero: item
-            //     }
-            // });
-            //console.log(objDOT);
-            objData(objDOTA);       
-            
+            let objDOTA = JSON.parse(request.responseText);   
+            objData(objDOTA);     
+                        
         } 
     }
 
     request.open("GET","https://api.opendota.com/api/heroStats");
     request.send();
-
-    console.log("Lista usuarios cargado como objeto(?");
-
+ 
 }
 
 
@@ -93,18 +67,136 @@ function renderImgPJ(objData) {
             let refId = i;
             
             verDatosPJ(objData, refId);
+            consultarHistoryAndAbilities(objDOTA2=>{
+                verHistoryPJ(objData, refId, objDOTA2)
+
+            });
 
             findLiveHero(objLive => {
             
                 finderProInGame(objLive, refId);
-            
+                console.log(refId);
             })
         })
 
     }
-    console.log("Querías Botones, ahí tenes!! Pero con imagenes");
+    
 }
 
+
+function consultarHistoryAndAbilities(objData2) {
+
+    var request = new XMLHttpRequest();    
+    
+    request.onreadystatechange = function() {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+            let objDOTA2 = JSON.parse(request.responseText);   
+            objData2(objDOTA2);    
+                        
+        } 
+    }
+
+    request.open("GET","../data/spanish/heroes.json");
+    request.send();
+
+}
+
+function verHistoryPJ(objData, refId, objData2){
+
+    divHistoryPJ.innerHTML = "";            //se limpia la vista del elemento
+
+    for (let i = 0; i < objData2.length ; i++) {
+        //al tener que "enlazar" jsons verifica que name y localized_name sea true, de ese modo poder acceder a la bio del pj
+        if( objData[refId].localized_name == objData2[i].name ){
+            //se verifica que la bio del pj no este undefined, de ser el caso lo reemplaza con: historia no disponible
+            if (objData2[i].bio == undefined) {
+
+                divHistoryPJ.appendChild(document.createTextNode("Historia no dispinible"))  ;  
+                divHistoryPJ.appendChild(document.createElement("br"));
+
+            }else{ 
+            
+                divHistoryPJ.appendChild(document.createTextNode(objData2[i].bio))  ;  
+                divHistoryPJ.appendChild(document.createElement("br"));
+
+            }  
+            let flag1 = objData2[i].abilities;
+            let flag2 = objData2[i].talents;   
+            verAbilities(flag1);
+            verTalents(flag2);
+        }              
+    }
+}
+
+function verAbilities(flag1){
+
+    divAbilitiesPJ.innerHTML = "";          //se limpia los elementos en la tabla
+    
+    let tabla   = document.createElement("table");
+    let tblBody = document.createElement("tbody");
+    
+    //flag1 hace referencia a la posicion objData2.abilities que se lo pasa la funcion anterior
+    for(let j = 0; j < flag1.length ; j ++){
+        
+        //posiciona las habilidades y sus caracteristicas en un intento de tabla
+        let fila = document.createElement("tr");
+        
+        let imgAbilities = document.createElement("img");
+        imgAbilities.setAttribute("class","abilitieSize"); 
+        //declara la ruta del png de la habilidad   
+        imgAbilities.setAttribute("src", "../stuff/abilities/"+flag1[j].tag+".png");
+                
+        let name = document.createTextNode(flag1[j].name);               
+        let description = document.createTextNode(flag1[j].description);
+        let cooldown = document.createTextNode("Cooldown(s): "+flag1[j].cooldown);
+        let manacost = document.createTextNode("ManaCost: "+flag1[j].manacost);
+        //indagar la forma de reemplazar los undefined sin que se repitan indiscriminadamente(podría hacer bocha de if´s o un if que verifique cada dato pero no es estetico(?))                   
+        var columna1 = document.createElement("td");                                        
+        columna1.appendChild(imgAbilities);
+        var columna2 = document.createElement("td");                                        
+        columna2.appendChild(name );
+        var columna3 = document.createElement("td");                                        
+        columna3.appendChild(description);
+        var columna4 = document.createElement("td");                                                    
+        columna4.appendChild(cooldown);
+        var columna5 = document.createElement("td");                                        
+        columna5.appendChild(manacost);
+                  
+        // todo esto me quemo la cabeza pero la tabla aparece... 
+        fila.appendChild(columna1);
+        fila.appendChild(columna2);
+        fila.appendChild(columna3);
+        fila.appendChild(columna4);
+        fila.appendChild(columna5);
+        
+        tblBody.appendChild(fila);
+       
+    }    
+    
+    tabla.appendChild(tblBody);
+    tabla.setAttribute("border", "1");
+    
+    divAbilitiesPJ.appendChild(tabla);
+
+}
+
+function verTalents(flag2){
+    divTalentsPJ.innerHTML = "";        //limpia el div 
+    
+    let talent= document.createTextNode("Talentos a elección:");
+    divTalentsPJ.appendChild(talent);
+        
+    for (let a = 0; a < flag2.length; a ++) {
+
+        let ability = document.createTextNode(flag2[a].name);
+        divTalentsPJ.appendChild(document.createElement("br"))      
+        divTalentsPJ.appendChild(ability);
+        
+    }
+
+}
 
 function verDatosPJ(objData, refId){
 
@@ -148,7 +240,7 @@ function verDatosPJ(objData, refId){
             logostr.setAttribute("src", "../stuff/hero_str.png");
             divGeneralPJ.appendChild(logostr);
 
-            divStatsPJ.style.backgroundColor = "#D3423D"; /// ALL SW(? CHANGE COLOR BACKGR POR TONOS ACORDES :V
+            divStatsPJ.style.backgroundColor = "#D3423D"; 
             divStatsPJ.appendChild(document.createTextNode("Atributo Principal: Fuerza"));
             divStatsPJ.appendChild(document.createElement("br"));
 
@@ -222,9 +314,8 @@ function findLiveHero(objLiveData) {
         if (this.readyState == 4 && this.status == 200) {
 
             let objLive = JSON.parse(request.responseText);
-            
-            objLiveData(objLive);       
-           
+            objLiveData(objLive);   
+                       
         } 
     }
 
@@ -243,26 +334,25 @@ function finderProInGame(objLiveData, refId){
 
     usingInGame.appendChild(document.createTextNode("Pros en este momento: "))  ;  
     usingInGame.appendChild(document.createElement("br"));
-    
+    //variable como referencia de cantidad de jugadores
     let normies = 0;
     //se recorre el objLiveData        
     for(i = 0; i < objLiveData.length; i ++){
  
         for(j = 0; j < objLiveData[i].players.length; j ++){
            
-            if(objLiveData[i].players[j].hero_id == refId && objLiveData[i].players[j].is_pro == true){
+            if(objLiveData[i].players[j].hero_id === refId && objLiveData[i].players[j].is_pro === true && objLiveData[i].players[j].team_name != undefined){
                                 
                 // se rellena con la data de la partida (enlazar otro ajax), derechito al doom :v 
                 // se deberia hacer otra funcion(imperativo p/ mejor control de los datos) que dibuje los datos al doom (? 
-                usingInGame.appendChild(document.createTextNode((objLiveData[i].players[j].name)))  ;  
+                let pro = document.createTextNode((objLiveData[i].players[j].name) + " que pertenece al team: " + objLiveData[i].players[j].team_name);
+                usingInGame.appendChild(pro);  
                 usingInGame.appendChild(document.createElement("br"));
                          
             }        
             if(objLiveData[i].players[j].hero_id == refId && objLiveData[i].players[j].is_pro != true){
-                        
-               normies ++;
-                //para encontrar el name necesitamos otro ajax y posterior una funcion que realice una verificacion por medio de ACCOUNT_ID
-                // O EN SU DEFECTO UN CONTADOR Y MOSTRAR LA CANTIDAD DE PERSONAS QUE ESTAN JUGANDO ESE PJ EN ESE MOMENTO
+               //contador de jugadores usando ese PJ         
+               normies ++;                            
                 
             }               
         }                
@@ -276,4 +366,4 @@ function finderProInGame(objLiveData, refId){
 //-----------------------  IMPLEMENTAR PARTIDAS PROFESIONALES----------------------
 //MISMO QUE LO ANTERIOR QUE RETORNE: TORNEO QUE SE ESTA JUGANDO, DATOS DEL TEAM COMPLETO, PARTIDAS JUGADAS, GANADAS Y PORCENTAJE DE VICTORIA
 
-
+//Notas: la estetica quedo de lado, el json de objDOTA2 esta muy desprolijo, y lamento no haber "echo" commits cuando debía..

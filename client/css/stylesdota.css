@@ -62,44 +62,77 @@ body{
 
 }
 
+.logoAtri{
+	width: 40px;
+	height: auto;
+}
+
 .contenedor {
-	display: flex;
+	position: center;
+	display: inline;
 	justify-content: center;
 	
 }
 
+.imgPJ{
+	padding-top: 10px;	
+	margin-left: auto;
+  	margin-right: auto;
+	width: 270px;
+	height: auto;
+}
 
 .imgSize{
 	border-radius: 270px;
-  	margin-left: auto;
-  	margin-right: auto;
 	width: 270px;
 	height: auto;	
 }
 
-.statsPJ{
-	padding: 10px;
+.historyPJ{
+	padding: 15px;
 	color: white;
-	
-	display: inline-block;
-	background-color: rgb(162, 185, 57);
+	position: relative;
 	margin-left: 10px;
-	font-size: 20px;
-		
+	font-size: 18px;
 }
 
-.logoAtri{
+.abilities{
+	padding: 15px;
+	color: white;
+	position: relative;
+	font-size: 18px;
+	text-align: center;
+}
 
-	width: 40px;
+.abilitieSize{
+	width: 100px;
 	height: auto;
 
+}
+
+.talents{
+	text-align: center;
+	padding: 10px;
+	color: white;	
+	display: inline-flex;
+	background-color: rgb(241, 158, 90);
+	font-size: 20px;
+}
+
+.statsPJ{
+	padding: 10px;
+	color: white;	
+	display: inline-flex;
+	background-color: transparent;
+	font-size: 20px;
+		
 }
 
 .usingInGame{
 
 	color: white;
 	padding: 10px;
-	display: inline-block;
+	display: inline-flex;
 
 	background-color: rgb(42, 159, 189);
 	

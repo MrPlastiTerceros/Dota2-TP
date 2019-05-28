@@ -179,6 +179,7 @@ function verAbilities(flag1){
     tabla.setAttribute("border", "1");
     
     divAbilitiesPJ.appendChild(tabla);
+    console.log("not again, commit is important");
 
 }
 
@@ -187,15 +188,14 @@ function verTalents(flag2){
     
     let talent= document.createTextNode("Talentos a elección:");
     divTalentsPJ.appendChild(talent);
-        
+    //recorre el objeto en talentos    
     for (let a = 0; a < flag2.length; a ++) {
-
+        //toma el "nombre" del talento para mostralo 
         let ability = document.createTextNode(flag2[a].name);
         divTalentsPJ.appendChild(document.createElement("br"))      
         divTalentsPJ.appendChild(ability);
         
     }
-
 }
 
 function verDatosPJ(objData, refId){

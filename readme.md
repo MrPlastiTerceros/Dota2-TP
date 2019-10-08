@@ -14,7 +14,7 @@ En ese momento se puede abrir un browser y navegar a `localhost:5000` y debería
 
 Los datos son obtenidos desde la api de Opendota(estadisticas base, img del PJ, partidas al momento) y un user de github(historia, talents, habilidades)
 
-La idea general es que lo jugadores constantes puedan informarse rapido de las caracteristicas(talentos, estadisticas base, habilidades, historia introductoria) del pj clickeado. Aparte de una lista de proplayers que lo estan usando en el momento(si es el caso) junto con la cantidad de players no profesionales, con el fin de saber la pularidad del heroe PJ en cuestión.
+La idea general es que lo jugadores constantes puedan informarse rapido de las caracteristicas(talentos, estadisticas base, habilidades, historia introductoria) del pj clickeado. Aparte de una lista de proplayers que lo estan usando en el momento(si es el caso) junto con la cantidad de players no profesionales, con el fin de saber la popularidad del heroe PJ en cuestión.
 
 ### SERVER
 

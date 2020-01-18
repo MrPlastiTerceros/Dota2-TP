@@ -1,9 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require("path");
-const fs = require("fs");
-
-var heroesjson = fs.readFileSync("../client/data/spanish/heroes.json");
+const fs = require("fs");//cada uno de los controladores
+const HeroController = require("./controllers/heroesControllers");
 
 // Ubicación de recursos estáticos
 app.use(express.static(path.join(__dirname, "../client")));
@@ -15,13 +14,7 @@ app.get('/', (req, res) => {
   res.sendFile(pathIndex);
 });  
 
-app.get("/heroes/:nombre", (req, res)=>{
-  var paramName= req.params.nombre;
-  let heroes= JSON.parse(heroesjson);
-  let result = heroes.filter(heroe => heroe.name == paramName)
-  
-  res.send(result[0]);
-});
+app.get("/heroes/:nombre", HeroController.getHistoryHero);
 
 
 

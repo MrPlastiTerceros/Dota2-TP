@@ -1,18 +1,11 @@
 //div en el que se cargan las imagenes de los pj
 let divImgsAllPJs = document.getElementById("divImgAllPJ");     
-//div en el que se dibuja el nombre pj al dom 
 let divGeneralPJ = document.getElementById("divGeneralPJ");    
-//en el que se carga la imagen del pj(más grande) despues del click
 let divImgPJ = document.getElementById("divImgPJ");     
-//div donde se muestra la historia del pj
 let divhistoryPJ = document.getElementById("divHistoryPJ");
-//div donde se dibuja las habilidades del pj
 let divAbilitiesPJ = document.getElementById("divAbilitiesPJ");
-//div donde se dibuja la data del pj
 let divStatsPJ = document.getElementById("divStatsPJ");  
-//donde se dibujan los talentos(datos) del pj      
 let divTalentsPJ = document.getElementById("divTalentsPJ");      
-//span donde se dibujan los pros y los nomries usando el pj
 let prosUsingInGame = document.getElementById("usingInGame");   
 
 //------------------------------------------------------------------------
@@ -28,27 +21,7 @@ consultarDataGame(objDOTA => {
 let rutabase = "https://api.opendota.com";      
 
 
-// AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FUNCA
-
-function consultarDataGame(objData) {
-
-    var request = new XMLHttpRequest();    
-    
-    request.onreadystatechange = function() {
-
-        if (this.readyState == 4 && this.status == 200) {
-
-            let objDOTA = JSON.parse(request.responseText);   
-            objData(objDOTA);     
-                        
-        } 
-    }
-
-    request.open("GET","https://api.opendota.com/api/heroStats");
-    request.send();
- 
-}
-
+// AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FU
 
 function renderImgPJ(objData) {
     
@@ -57,77 +30,39 @@ function renderImgPJ(objData) {
         let renderPJ = document.createElement("img");
 
         renderPJ.setAttribute("class", "img_dota");
+        renderPJ.setAttribute("id", objData[i].localized_name);
         renderPJ.setAttribute("src",  (rutabase + (objData[i].img)));
 
         divImgsAllPJs.appendChild(renderPJ);
      
-
         renderPJ.addEventListener("click", function(){
-
             let refId = i;
-            
             verDatosPJ(objData, refId);
-            consultarHistoryAndAbilities(objDOTA2=>{
-                verHistoryPJ(objData, refId, objDOTA2)
-
-            });
-
-            findLiveHero(objLive => {
-            
-                finderProInGame(objLive, refId);
-                console.log(refId);
-            })
+            consultarHistoryAndAbilities(verHistoryPJ,objData[i].localized_name);
+            findLiveHero(objLive => finderProInGame(objLive, refId));
         })
-
     }
-    
-}
+}    
 
-
-function consultarHistoryAndAbilities(objData2) {
-
-    var request = new XMLHttpRequest();    
-    
-    request.onreadystatechange = function() {
-
-        if (this.readyState == 4 && this.status == 200) {
-
-            let objDOTA2 = JSON.parse(request.responseText);   
-            objData2(objDOTA2);    
-                        
-        } 
-    }
-
-    request.open("GET","../data/spanish/heroes.json");
-    request.send();
-
-}
-
-function verHistoryPJ(objData, refId, objData2){
+function verHistoryPJ(objData2){
 
     divHistoryPJ.innerHTML = "";            //se limpia la vista del elemento
-
-    for (let i = 0; i < objData2.length ; i++) {
-        //al tener que "enlazar" jsons verifica que name y localized_name sea true, de ese modo poder acceder a la bio del pj
-        if( objData[refId].localized_name == objData2[i].name ){
-            //se verifica que la bio del pj no este undefined, de ser el caso lo reemplaza con: historia no disponible
-            if (objData2[i].bio == undefined) {
+            if (objData2.bio == undefined) {
 
                 divHistoryPJ.appendChild(document.createTextNode("Historia no dispinible"))  ;  
                 divHistoryPJ.appendChild(document.createElement("br"));
 
             }else{ 
             
-                divHistoryPJ.appendChild(document.createTextNode(objData2[i].bio))  ;  
+                divHistoryPJ.appendChild(document.createTextNode(objData2.bio))  ;  
                 divHistoryPJ.appendChild(document.createElement("br"));
 
             }  
-            let flag1 = objData2[i].abilities;
-            let flag2 = objData2[i].talents;   
+            let flag1 = objData2.abilities;
+            let flag2 = objData2.talents;   
             verAbilities(flag1);
-            verTalents(flag2);
-        }              
-    }
+            verTalents(flag2);        
+    
 }
 
 function verAbilities(flag1){
@@ -299,28 +234,6 @@ function verDatosPJ(objData, refId){
         
     }
       
-}
-
-///---------------------------ZONA DE PARTIDAS LIVE------------------------------------------
-
-// 10/5 LA API RESPONDE MUY LENTO. VERIFICADO POR FUERA DEL SCRIP/ ES TEMP DE TORNEOS DEBE ESTAR SOBRECARGADA(?
-function findLiveHero(objLiveData) {
-
-    var request = new XMLHttpRequest();    
-    
-    request.onreadystatechange = function() {
-
-        if (this.readyState == 4 && this.status == 200) {
-
-            let objLive = JSON.parse(request.responseText);
-            objLiveData(objLive);   
-                       
-        } 
-    }
-
-    request.open("GET","https://api.opendota.com/api/live");
-    request.send();
-    
 }
 
 

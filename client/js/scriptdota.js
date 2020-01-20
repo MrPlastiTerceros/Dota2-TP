@@ -16,10 +16,8 @@ consultarDataGame(objDOTA => {
 
 });
 
-
 // raiz de img    EXAMPLE: https://api.opendota.com --> /apps/dota2/images/heroes/antimage_full.png?
 let rutabase = "https://api.opendota.com";      
-
 
 // AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FU
 
@@ -47,21 +45,21 @@ function renderImgPJ(objData) {
 function verHistoryPJ(objData2){
 
     divHistoryPJ.innerHTML = "";            //se limpia la vista del elemento
-            if (objData2.bio == undefined) {
+    if (objData2.bio == undefined) {
 
-                divHistoryPJ.appendChild(document.createTextNode("Historia no dispinible"))  ;  
-                divHistoryPJ.appendChild(document.createElement("br"));
+        divHistoryPJ.appendChild(document.createTextNode("Historia no dispinible"))  ;  
+        divHistoryPJ.appendChild(document.createElement("br"));
 
-            }else{ 
+    }else{ 
             
-                divHistoryPJ.appendChild(document.createTextNode(objData2.bio))  ;  
-                divHistoryPJ.appendChild(document.createElement("br"));
+        divHistoryPJ.appendChild(document.createTextNode(objData2.bio))  ;  
+        divHistoryPJ.appendChild(document.createElement("br"));
 
-            }  
-            let flag1 = objData2.abilities;
-            let flag2 = objData2.talents;   
-            verAbilities(flag1);
-            verTalents(flag2);        
+    }  
+    let flag1 = objData2.abilities;
+    let flag2 = objData2.talents;   
+    verAbilities(flag1);
+    verTalents(flag2);        
     
 }
 

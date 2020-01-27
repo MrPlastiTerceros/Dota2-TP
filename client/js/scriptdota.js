@@ -1,25 +1,23 @@
 //div en el que se cargan las imagenes de los pj
-let divImgsAllPJs = document.getElementById("divImgAllPJ");     
-let divGeneralPJ = document.getElementById("divGeneralPJ");    
-let divImgPJ = document.getElementById("divImgPJ");     
+let divImgsAllPJs = document.getElementById("divImgAllPJ");
+let divGeneralPJ = document.getElementById("divGeneralPJ");
+let divImgPJ = document.getElementById("divImgPJ");
 let divhistoryPJ = document.getElementById("divHistoryPJ");
 let divAbilitiesPJ = document.getElementById("divAbilitiesPJ");
-let divStatsPJ = document.getElementById("divStatsPJ");  
-let divTalentsPJ = document.getElementById("divTalentsPJ");      
-let prosUsingInGame = document.getElementById("usingInGame");   
+let divStatsPJ = document.getElementById("divStatsPJ");
+let divTalentsPJ = document.getElementById("divTalentsPJ");
+let prosUsingInGame = document.getElementById("usingInGame");
 
 //------------------------------------------------------------------------
 
 consultarDataGame(objDOTA => {
-
 	renderImgPJ(objDOTA);
-
 });
 
 // raiz de img    EXAMPLE: https://api.opendota.com --> /apps/dota2/images/heroes/antimage_full.png?
 let rutabase = "https://api.opendota.com";      
 
-// AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FU
+// AGREGAR VALIDACIONES AJAX AUNQUE SE SABE QUE FUNCIONA
 
 function renderImgPJ(objData) {
     
@@ -47,19 +45,19 @@ function verHistoryPJ(objData2){
     divHistoryPJ.innerHTML = "";            //se limpia la vista del elemento
     if (objData2.bio == undefined) {
 
-        divHistoryPJ.appendChild(document.createTextNode("Historia no dispinible"))  ;  
+        divHistoryPJ.appendChild(document.createTextNode("Historia no dispinible"));
         divHistoryPJ.appendChild(document.createElement("br"));
 
     }else{ 
             
-        divHistoryPJ.appendChild(document.createTextNode(objData2.bio))  ;  
+        divHistoryPJ.appendChild(document.createTextNode(objData2.bio));
         divHistoryPJ.appendChild(document.createElement("br"));
 
     }  
     let flag1 = objData2.abilities;
-    let flag2 = objData2.talents;   
+    let flag2 = objData2.talents;
     verAbilities(flag1);
-    verTalents(flag2);        
+    verTalents(flag2);
     
 }
 
@@ -77,27 +75,26 @@ function verAbilities(flag1){
         let fila = document.createElement("tr");
         
         let imgAbilities = document.createElement("img");
-        imgAbilities.setAttribute("class","abilitieSize"); 
-        //declara la ruta del png de la habilidad   
+        imgAbilities.setAttribute("class","abilitieSize");
+        //declara la ruta del png de la habilidad
         imgAbilities.setAttribute("src", "../stuff/abilities/"+flag1[j].tag+".png");
-                
-        let name = document.createTextNode(flag1[j].name);               
+
+        let name = document.createTextNode(flag1[j].name);
         let description = document.createTextNode(flag1[j].description);
         let cooldown = document.createTextNode("Cooldown(s): "+flag1[j].cooldown);
         let manacost = document.createTextNode("ManaCost: "+flag1[j].manacost);
         //indagar la forma de reemplazar los undefined sin que se repitan indiscriminadamente(podría hacer bocha de if´s o un if que verifique cada dato pero no es estetico(?))                   
-        var columna1 = document.createElement("td");                                        
+        var columna1 = document.createElement("td");
         columna1.appendChild(imgAbilities);
-        var columna2 = document.createElement("td");                                        
+        var columna2 = document.createElement("td");
         columna2.appendChild(name );
-        var columna3 = document.createElement("td");                                        
+        var columna3 = document.createElement("td");
         columna3.appendChild(description);
-        var columna4 = document.createElement("td");                                                    
+        var columna4 = document.createElement("td");
         columna4.appendChild(cooldown);
-        var columna5 = document.createElement("td");                                        
+        var columna5 = document.createElement("td");
         columna5.appendChild(manacost);
                   
-        // todo esto me quemo la cabeza pero la tabla aparece... 
         fila.appendChild(columna1);
         fila.appendChild(columna2);
         fila.appendChild(columna3);
@@ -116,7 +113,8 @@ function verAbilities(flag1){
 }
 
 function verTalents(flag2){
-    divTalentsPJ.innerHTML = "";        //limpia el div 
+
+    divTalentsPJ.innerHTML = "";        //limpia el div
     
     let talent= document.createTextNode("Talentos a elección:");
     divTalentsPJ.appendChild(talent);
@@ -124,9 +122,8 @@ function verTalents(flag2){
     for (let a = 0; a < flag2.length; a ++) {
         //toma el "nombre" del talento para mostralo 
         let ability = document.createTextNode(flag2[a].name);
-        divTalentsPJ.appendChild(document.createElement("br"))      
-        divTalentsPJ.appendChild(ability);
-        
+        divTalentsPJ.appendChild(document.createElement("br"))
+        divTalentsPJ.appendChild(ability);        
     }
 }
 
@@ -162,8 +159,7 @@ function verDatosPJ(objData, refId){
     render.setAttribute("class", "imgSize");
     render.setAttribute("src", (rutabase+img));
     divImgPJ.appendChild(render);   
- 
-    
+     
     // se le asigna un background color de acuerdo al atributo primario y le agrega el icono del atributo al lado del nombre
     switch (attr_base) {
         case "str":
@@ -226,7 +222,6 @@ function verDatosPJ(objData, refId){
 
     //recorre el objeto y dibuja los roles que se le atribuye al pj
     for (let i = 0; i < role.length; i++) {
-
         divStatsPJ.appendChild(document.createElement("br"));
         divStatsPJ.appendChild(document.createTextNode(role[i]));
         
@@ -242,11 +237,11 @@ function finderProInGame(objLiveData, refId){
 
     prosUsingInGame.innerHTML = " ";                //se limpia el elemento
 
-    usingInGame.appendChild(document.createTextNode("Pros en este momento: "))  ;  
+    usingInGame.appendChild(document.createTextNode("Pros en este momento: "));
     usingInGame.appendChild(document.createElement("br"));
     //variable como referencia de cantidad de jugadores
     let normies = 0;
-    //se recorre el objLiveData        
+    //se recorre el objLiveData
     for(i = 0; i < objLiveData.length; i ++){
  
         for(j = 0; j < objLiveData[i].players.length; j ++){
@@ -256,21 +251,19 @@ function finderProInGame(objLiveData, refId){
                 // se rellena con la data de la partida (enlazar otro ajax), derechito al doom :v 
                 // se deberia hacer otra funcion(imperativo p/ mejor control de los datos) que dibuje los datos al doom (? 
                 let pro = document.createTextNode((objLiveData[i].players[j].name) + " que pertenece al team: " + objLiveData[i].players[j].team_name);
-                usingInGame.appendChild(pro);  
+                usingInGame.appendChild(pro);
                 usingInGame.appendChild(document.createElement("br"));
-                         
-            }        
+            }
+
             if(objLiveData[i].players[j].hero_id == refId && objLiveData[i].players[j].is_pro != true){
-               //contador de jugadores usando ese PJ         
-               normies ++;                            
-                
-            }               
-        }                
+               //contador de jugadores usando ese PJ
+               normies ++;
+            }
+        }
     }
 
-    usingInGame.appendChild(document.createTextNode("Jugadores usandolo: "+ normies ))  ;  
+    usingInGame.appendChild(document.createTextNode("Jugadores usandolo: "+ normies ));
     usingInGame.appendChild(document.createElement("br"));
-
 }
 
 //-----------------------  IMPLEMENTAR PARTIDAS PROFESIONALES----------------------
